@@ -2,3 +2,8 @@
 *.bin
 *.iso
 .vscode
+/target/
+/Cargo.lock
+/build/
+/dist/
+*.d

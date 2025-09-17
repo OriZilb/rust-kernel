@@ -1,6 +1,7 @@
 // src/implementation/kernel/panic.rs
 
 use core::panic::PanicInfo;
+use crate::std_lib;
 
 #[panic_handler]
 pub fn panic(_info: &PanicInfo) -> ! {

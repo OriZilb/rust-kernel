@@ -7,7 +7,7 @@ cd ~/rust-kernel/buildenv && docker build -t my-kernel-env .
 
 > Now run the container.
 ```bash 
-cd ~/my-kernel/buildenv && docker run --rm -it -v ~/rust-kernel:/root/env my-kernel-env bash
+cd ~/rust-kernel/buildenv && docker run --rm -it -v ~/rust-kernel:/root/env my-kernel-env bash
 ```
 
 

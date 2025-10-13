@@ -13,7 +13,7 @@ use x86_64::instructions::interrupts as x86_64_interrupts;
 pub extern "C" fn kernel_main() -> ! {
     // Kernel code starts here
     std_lib::vga::clear_screen();
-    std_lib::vga::println("Hello, World!");
+    std_lib::vga::println("Hello, World!2");
     std_lib::vga::println("This is my kernel.");
 
     unsafe { interrupts::init_pic(); }

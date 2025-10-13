@@ -5,7 +5,7 @@ This script defines the memory layout for the kernel, starting at the 1MB mark.
 
 /*
 The ENTRY directive specifies the entry point of the program,
-which is the start symbol defined in rust-kernel/src/x86_64/main.asm
+which is the start symbol defined in rust-kernel/src/implementation/arch/x86_64/main.asm
 */
 ENTRY(start)
 
@@ -30,7 +30,8 @@ SECTIONS
     }
 
     /*
-    The next section is the .text section, which is defined at rust-kernel/src/x86_64/main.asm and main64.asm in the
+    The next section is the .text section, which is defined at
+    rust-kernel/src/implementation/arch/x86_64/main.asm and main64.asm in the
     same directory. This section contains the actual code of the kernel. As mentioned earlier the entry point will be
     in the start symbol which is defined in main.asm, but at the end of the .text section of main.asm we jump to the
     .text section of main64.asm to continue execution in 64-bit mode.

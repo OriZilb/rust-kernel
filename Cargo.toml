@@ -2,7 +2,7 @@
 name = "rust-kernel"
 version = "0.1.0"
 edition = "2021"
-authors = ["Zikithezikit zikithezikit@gmail.com"]
+authors = ["Zilberguy ori.zilberman1@gmail.com", "Zikithezikit zikithezikit@gmail.com"]
 description = "A simple x86_64 kernel written in Rust."
 
 

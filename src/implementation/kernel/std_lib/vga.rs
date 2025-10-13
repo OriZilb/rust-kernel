@@ -73,13 +73,26 @@ pub fn print_char_with_color(byte: u8, foreground_color: ColorCodeVga, backgroun
             Cursor::Position { col: c, row: r } => { col = c; row = r; }
         }
 
+        let offset = buffer_offset(col, row);
+
         match byte {
             b'\n' => {
                 col = 0;
                 row += 1;
             }
+            b'\x08' => { // Backspace
+                if col > 0 {
+                    col -= 1;
+                    *VGA_BUFFER_ADDRESS.add(offset) = b' ';
+                } else if row > 0 {
+                    *VGA_BUFFER_ADDRESS.add(buffer_offset(col, row)) = b' ';
+                    row -= 1;
+                    col = BUFFER_WIDTH - 1;
+                } else if row == 0 {
+                    *VGA_BUFFER_ADDRESS.add(buffer_offset(col, row)) = b' ';
+                }
+            }
             _ => {
-                let offset = buffer_offset(col, row);
                 *VGA_BUFFER_ADDRESS.add(offset) = byte;
                 *VGA_BUFFER_ADDRESS.add(offset + 1) = foreground_background_colors(foreground_color, background_color);
                 col += 1;

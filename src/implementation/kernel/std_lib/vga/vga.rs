@@ -1,47 +1,20 @@
+mod unsafe_wrappers;
+
 // VGA buffer constants and color enum
-pub const VGA_BUFFER_ADDRESS: *mut u8 = 0xb8000 as *mut u8;
-pub const BUFFER_WIDTH: usize = 80;
-pub const BUFFER_HEIGHT: usize = 25;
-
-#[derive(Clone, Copy)]
-pub enum ColorCodeVga {
-    Black = 0x0,
-    Blue = 0x1,
-    Green = 0x2,
-    Cyan = 0x3,
-    Red = 0x4,
-    Magenta = 0x5,
-    Brown = 0x6,
-    LightGray = 0x7,
-    DarkGray = 0x8,
-    LightBlue = 0x9,
-    LightGreen = 0xa,
-    LightCyan = 0xb,
-    LightRed = 0xc,
-    Pink = 0xd,
-    Yellow = 0xe,
-    White = 0xf,
-}
-
-// Cursor position
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
-pub enum Cursor {
-    Position { col: usize, row: usize },
-}
-
+use super::consts::*;
+use super::utils::*;
 static mut CURSOR: Cursor = Cursor::Position { col: 0, row: 0 };
 
-// Helper to get buffer offset
-fn buffer_offset(col: usize, row: usize) -> usize {
-    (row * BUFFER_WIDTH + col) * 2
-}
-
-// Combine foreground and background color into one byte
-pub fn foreground_background_colors(foreground: ColorCodeVga, background: ColorCodeVga) -> u8 {
-    (foreground as u8) | ((background as u8) << 4)
-}
-
-// Scroll the screen up by one line
+/// Scroll the screen up by one line
+/// This function moves all lines up by one and clears the last line
+/// Note that this last line isn't saved anywhere currently, and hence after the line is deleted
+/// it is lost forever.
+///
+/// # Safety
+/// This function performs raw pointer arithmetic and writes directly to the VGA buffer.
+/// It should be used with caution to avoid undefined behavior.
+///
+/// #
 pub fn scroll_up() {
     unsafe {
         for row in 1..BUFFER_HEIGHT {

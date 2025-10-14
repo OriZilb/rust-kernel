@@ -1,4 +1,6 @@
 use crate::std_lib::vga::consts::ColorCodeVga;
+use crate::std_lib::vga::VGAChar::color_codes::ColorCodeVga;
+
 pub const BYTES_PER_CHAR: usize = 2; // Each VGA character is represented by 2 bytes
 pub struct VGAChar {
     pub char: u16,
@@ -48,16 +50,47 @@ impl VGAChar {
         }
     }
     
-    
+    /// Gets the ascii character represented in the VGAChar struct
+    /// # Arguments
+    /// * `self` - The VGAChar object to get its ascii character from
+    /// # Returns
+    /// *`u8` - The ascii representation of the char
     pub fn to_ascii(&self) -> u8 {
         (self.char & 0x00FF) as u8
     }
     
-    /// Converts the VGAChar to a u16 value
+    /// Gets the color byte from the VGAChar
     /// The lower byte represents the ASCII character, and the upper byte represents the color code
     /// # Returns
     /// * `u16` - The combined u16 value
-    pub fn to_u16(&self) -> u16 {
-        (self.color_code as u16) << 8 | (self.ascii_character as u16)
+    pub fn get_color(&self) -> u8 {
+        (self.char >> 8) as u8
+    }
+
+    /// Get the foreground color from a VGAChar
+    /// # Arguments
+    /// * `self` - The VGAChar to get the foreground color of
+    /// # Returns
+    /// * `ColorCodeVga` - the foreground color of the char
+    pub fn get_foreground_color(&self) -> ColorCodeVga {
+        let color = self.get_color();
+        let foreground_color = color & 0x0F;
+        match ColorCodeVga::from_u8(foreground_color) {
+            Some(color) => color,
+            _ => ColorCodeVga::Black // will never happen
+        }
+    }
+
+    /// Get the background color from a VGAChar
+    /// # Arguments
+    /// * `self` - The VGAChar to get the background color of
+    /// # Returns
+    /// * `ColorCodeVga` - the background color of the char
+    pub fn get_background_color(&self) -> ColorCodeVga {
+        let background_color = (self.char >> 12) as u8;
+        match ColorCodeVga::from_u8(background_color) {
+            Some(color) => color,
+            _ => ColorCodeVga::Black // will never happen
+        }
     }
 }

@@ -1,11 +1,11 @@
 /**
  * VGA - video graphics array module.
- * Provides basic text output functionality to the screen using VGA text mode.
+ * Provides basic VGAChar output functionality to the screen using VGA VGAChar mode.
  */
 
 mod vga;
 mod consts;
 mod unsafe_wrappers;
-mod text;
+mod VGAChar;
 
 pub use vga::*;

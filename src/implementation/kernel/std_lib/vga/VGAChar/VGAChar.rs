@@ -1,5 +1,5 @@
 use crate::std_lib::vga::consts::ColorCodeVga;
-
+pub const BYTES_PER_CHAR: usize = 2; // Each VGA character is represented by 2 bytes
 pub struct VGAChar {
     pub char: u16,
 }
@@ -33,14 +33,19 @@ impl VGAChar {
     /// * `VGAChar` - The constructed VGAChar
     pub fn new_from_ascii_foreground_background_colors(ascii_character: u8, foreground: ColorCodeVga, background: ColorCodeVga) -> Self {
         let color_code = Self::combine_foreground_background_colors(foreground, background);
-        VGAChar {
-            ascii_character,
-            color_code,
-        }
+        VGAChar::new_from_ascii_and_color(ascii_character, color_code)
     }
-    
+
+    /// Create a VGAChar from the color byte and ASCII character
+    /// # Arguments
+    /// * `ascii_character` - The ASCII character (0-255)
+    /// * `color` - Combined color code byte (0-255)
+    /// # Returns
+    /// * `VGAChar` - The constructed VGAChar
     pub fn new_from_ascii_and_color(ascii_character: u8, color: u8) -> Self {
-        VGAChar.new()
+        VGAChar {
+            char: (color as u16) << 8 | (ascii_character as u16),
+        }
     }
     
     

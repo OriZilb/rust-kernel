@@ -55,7 +55,7 @@ impl VGAChar {
     /// * `self` - The VGAChar object to get its ascii character from
     /// # Returns
     /// *`u8` - The ascii representation of the char
-    pub fn to_ascii(&self) -> u8 {
+    pub fn get_ascii(&self) -> u8 {
         (self.char & 0x00FF) as u8
     }
     

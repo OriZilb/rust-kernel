@@ -1,5 +1,5 @@
-// Color codes for VGA VGAChar mode. Note that each color is represented by 4 bits.
-#[derive(Clone, Copy)]
+// Color codes for VGA vgachar mode. Note that each color is represented by 4 bits.
+#[derive(Clone, Copy, PartialEq, Eq)]
 pub enum ColorCodeVga {
     Black = 0x0,
     Blue = 0x1,

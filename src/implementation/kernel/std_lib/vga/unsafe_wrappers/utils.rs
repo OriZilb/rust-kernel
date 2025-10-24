@@ -1,8 +1,7 @@
 use super::super::consts::*;
-use super::super::VGAChar::BYTES_PER_CHAR;
 
-/// Calculate the byte offset in the VGA VGAChar buffer for a given column and row.
-/// Each character cell in VGA VGAChar mode consists of 2 bytes: one for the ASCII character
+/// Calculate the byte offset in the VGA vgachar buffer for a given column and row.
+/// Each character cell in VGA vgachar mode consists of 2 bytes: one for the ASCII character
 /// and one for the color attribute (foreground and background colors).
 /// # Arguments
 /// * `col` - Column index (0 to BUFFER_WIDTH - 1)

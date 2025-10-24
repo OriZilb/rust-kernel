@@ -1,5 +1,5 @@
 // re-export this module's contents
-mod unsafe_wrappers;
+mod vga_buffer_access;
 mod utils;
 
-pub use unsafe_wrappers::*;
+pub use vga_buffer_access::*;

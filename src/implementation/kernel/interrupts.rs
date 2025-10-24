@@ -1,3 +1,4 @@
+/*
 #![allow(dead_code)]
 
 use x86_64::structures::idt::{InterruptDescriptorTable, InterruptStackFrame};
@@ -117,3 +118,6 @@ fn pic_end_of_interrupt(irq: u8) {
     if irq >= 8 { unsafe { slave.write(END_OF_INTERRUPT) }; }
     unsafe { master.write(END_OF_INTERRUPT) };
 }
+
+
+*/

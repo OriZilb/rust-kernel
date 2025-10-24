@@ -1,10 +1,16 @@
-use crate::std_lib::vga::vgachar::color_codes::ColorCodeVga;
+use super::color_codes::ColorCodeVga;
 #[derive(Clone, Copy, PartialEq, Eq)]
 pub struct VGAChar {
     pub char: u16,
 }
 
 impl VGAChar {
+    
+    /// Create a new vgachar from a u16 value
+    /// # Arguments
+    /// * `char` - u16 value combining ASCII character and color code
+    /// # Returns
+    /// * `vgachar` - The constructed vgachar
     pub fn new(char: u16) -> Self {
         VGAChar {
             char,

@@ -5,21 +5,19 @@
 mod panic;
 mod std_lib;
 mod interrupts;
-
-use x86_64::instructions::interrupts as x86_64_interrupts;
-
-
+// use x86_64::instructions::interrupts as x86_64_interrupts;
+use std_lib::vga::*;
 #[no_mangle] // prevents Rust from mangling the name
 pub extern "C" fn kernel_main() -> ! {
-    // Kernel code starts here
-    std_lib::vga::clear_screen();
-    std_lib::vga::println("Hello, World!2");
-    std_lib::vga::println("This is my kernel.");
-
+    // Initialize VGA writer
+    clear_screen();
+    print("Hello 123");
+    /*
     unsafe { interrupts::init_pic(); }
     interrupts::init_idt();
     x86_64_interrupts::enable();
-
+    */
     loop{ x86_64::instructions::hlt(); };
 }
+
 

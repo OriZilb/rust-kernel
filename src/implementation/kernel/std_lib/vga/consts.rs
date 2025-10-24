@@ -1,18 +1,12 @@
-use crate::std_lib::vga::VGAChar::VGAChar::VGAChar;
+use crate::std_lib::vga::vgachar::VGAChar;
 
 /** VGA constants and types */
-pub const VGA_BUFFER_ADDRESS: *mut VGAChar = 0xb8000 as *mut VGAChar; // VGA VGAChar buffer address
+pub const VGA_BUFFER_ADDRESS: *mut VGAChar = 0xb8000 as *mut VGAChar; // VGA vgachar buffer address
 
 // VGA buffer dimensions
 pub const BUFFER_WIDTH: usize = 80;
 pub const BUFFER_HEIGHT: usize = 25;
-
-// Cursor position representation
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
-pub enum Cursor {
-    Position { col: usize, row: usize },
-}
-
+#[derive(Debug, Clone, Copy, Eq, PartialEq)]
 pub struct Position {
     pub col: usize,
     pub row: usize,

@@ -66,8 +66,7 @@ pub fn copy_char(src_position: Position, dest_position: Position) -> Result<(), 
     let dest_offset = buffer_offset(dest_position);
     match (src_offset, dest_offset) {
         (Some(src_o), Some(dest_o)) => unsafe {
-            let char = *VGA_BUFFER_ADDRESS.add(src_o);
-            *VGA_BUFFER_ADDRESS.add(dest_o) = char;
+            *VGA_BUFFER_ADDRESS.add(dest_o) = *VGA_BUFFER_ADDRESS.add(src_o);
             Ok(())
         },
         _ => Err("Source or destination position out of bounds"),

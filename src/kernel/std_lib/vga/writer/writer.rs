@@ -14,19 +14,15 @@ pub struct Writer {
 impl Default for Writer {
     /// Creates a default Writer with cursor at (0,0) and white on black colors.
     fn default() -> Self {
-        Writer::new()
-    }
-}
-
-impl Writer {
-    pub(super) const fn new() -> Self {
         Writer {
             cursor_position: Position { col: 0, row: 0 },
             foreground_color: ColorCodeVga::White,
             background_color: ColorCodeVga::Black,
         }
     }
+}
 
+impl Writer {
     /// Sets the cursor position of the Writer.
     /// # Arguments
     /// * `self` - The Writer instance

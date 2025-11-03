@@ -1,6 +1,6 @@
-use crate::std_lib::vga::{unsafe_wrappers, ColorCodeVga, VGAChar};
 use crate::std_lib::vga::consts::{Position, BUFFER_HEIGHT, BUFFER_WIDTH};
 use crate::std_lib::vga::writer::writer::Writer;
+use crate::std_lib::vga::{unsafe_wrappers, ColorCodeVga, VGAChar};
 
 impl Writer {
     /// Print a string using the Writer's current foreground and background colors.
@@ -23,7 +23,12 @@ impl Writer {
     /// * `background` - The background color to use
     /// # Returns
     /// * `()` - No return value
-    pub(super) fn print_colored(&mut self, string: &str, foreground: ColorCodeVga, background: ColorCodeVga) {
+    pub(super) fn print_colored(
+        &mut self,
+        string: &str,
+        foreground: ColorCodeVga,
+        background: ColorCodeVga,
+    ) {
         let old_foreground = self.get_foreground_color();
         let old_background = self.get_background_color();
         self.set_foreground_color(foreground);
@@ -52,7 +57,12 @@ impl Writer {
     /// * `background` - The background color to use
     /// # Returns
     /// * `()` - No return value
-    pub(super) fn println_colored(&mut self, string: &str, foreground: ColorCodeVga, background: ColorCodeVga) {
+    pub(super) fn println_colored(
+        &mut self,
+        string: &str,
+        foreground: ColorCodeVga,
+        background: ColorCodeVga,
+    ) {
         self.print_colored(string, foreground, background);
         self.handle_char(b'\n');
     }
@@ -67,15 +77,12 @@ impl Writer {
         for row in 0..BUFFER_HEIGHT {
             for col in 0..BUFFER_WIDTH {
                 let position = Position { col, row };
-                let blank_char = VGAChar::new_from_ascii_foreground_background_colors(
-                    b' ',
-                    color,
-                    color,
-                );
+                let blank_char =
+                    VGAChar::new_from_ascii_foreground_background_colors(b' ', color, color);
                 unsafe_wrappers::write_char(position, blank_char).unwrap();
             }
         }
-        self.set_cursor_position(Position {col: 0, row: 0});
+        self.set_cursor_position(Position { col: 0, row: 0 });
     }
 
     /// Clears the screen by filling it with black color.

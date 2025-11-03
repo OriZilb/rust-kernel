@@ -1,4 +1,3 @@
-use core::ptr;
 /**
  * Unsafe wrappers around VGA functions
  * These functions perform low-level operations on the VGA vgachar buffer
@@ -6,8 +5,9 @@ use core::ptr;
  * and to provide abstracted safe interfaces elsewhere.
  */
 use super::super::consts::*;
-use super::utils::buffer_offset;
 use super::super::vgachar::*;
+use super::utils::buffer_offset;
+use core::ptr;
 
 /// Read a character from the VGA buffer at the specified column and row
 ///
@@ -22,11 +22,9 @@ use super::super::vgachar::*;
 /// * vgachar` - The character byte at the specified position with its color coding, or None if out of bounds
 pub fn read_char(position: Position) -> Option<VGAChar> {
     let offset = buffer_offset(position);
-    match offset{
+    match offset {
         None => None,
-        Some(o) => unsafe {
-            Some(*VGA_BUFFER_ADDRESS.add(o))
-        },
+        Some(o) => unsafe { Some(*VGA_BUFFER_ADDRESS.add(o)) },
     }
 }
 
@@ -43,7 +41,7 @@ pub fn read_char(position: Position) -> Option<VGAChar> {
 /// * `Result<(), &'static str>` - Ok(()) if successful, Err message if out of bounds
 pub fn write_char(position: Position, char: VGAChar) -> Result<(), &'static str> {
     let offset = buffer_offset(position);
-    match offset{
+    match offset {
         None => Err("Position out of bounds"),
         Some(o) => unsafe {
             ptr::write_volatile(VGA_BUFFER_ADDRESS.add(o), char);
@@ -67,7 +65,10 @@ pub fn copy_char(src_position: Position, dest_position: Position) -> Result<(), 
     let dest_offset = buffer_offset(dest_position);
     match (src_offset, dest_offset) {
         (Some(src_o), Some(dest_o)) => unsafe {
-            ptr::write_volatile(VGA_BUFFER_ADDRESS.add(dest_o), *VGA_BUFFER_ADDRESS.add(src_o));
+            ptr::write_volatile(
+                VGA_BUFFER_ADDRESS.add(dest_o),
+                *VGA_BUFFER_ADDRESS.add(src_o),
+            );
             Ok(())
         },
         _ => Err("Source or destination position out of bounds"),

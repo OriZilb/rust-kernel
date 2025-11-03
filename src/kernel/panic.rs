@@ -1,4 +1,4 @@
-// src/implementation/kernel/panic.rs
+// src/kernel/panic.rs
 
 use core::panic::PanicInfo;
 

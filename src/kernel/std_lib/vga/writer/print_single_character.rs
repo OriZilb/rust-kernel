@@ -1,12 +1,11 @@
+use super::writer::Writer;
 use crate::std_lib::vga::consts::{Position, BUFFER_HEIGHT, BUFFER_WIDTH};
 use crate::std_lib::vga::{unsafe_wrappers, ColorCodeVga, VGAChar};
-use super::writer::Writer;
 
-const ASCII_PRINTABLE_LOWER_BOUNDARY : u8 = 32;
-const ASCII_PRINTABLE_UPPER_BOUNDARY : u8 = 126;
+const ASCII_PRINTABLE_LOWER_BOUNDARY: u8 = 32;
+const ASCII_PRINTABLE_UPPER_BOUNDARY: u8 = 126;
 const SPACES_IN_TAB: usize = 4;
 impl Writer {
-
     /// Handle a single character input.
     /// This function processes special characters like newline and carriage return.
     /// # Arguments
@@ -25,10 +24,12 @@ impl Writer {
             b'\r' => {
                 self.handle_carriage_return();
             }
-            b'\x08' => { // Backspace
+            b'\x08' => {
+                // Backspace
                 self.handle_backspace();
             }
-            b'\t' => { // Tab
+            b'\t' => {
+                // Tab
                 for _ in 0..SPACES_IN_TAB {
                     self.print_char(b' ');
                 }
@@ -44,11 +45,15 @@ impl Writer {
     /// # Returns
     /// * `()` - No return value
     fn print_char(&mut self, char: u8) {
-        unsafe_wrappers::write_char(self.get_cursor_position(), VGAChar::new_from_ascii_foreground_background_colors(
-            char,
-            self.get_foreground_color(),
-            self.get_background_color(),
-        )).unwrap();
+        unsafe_wrappers::write_char(
+            self.get_cursor_position(),
+            VGAChar::new_from_ascii_foreground_background_colors(
+                char,
+                self.get_foreground_color(),
+                self.get_background_color(),
+            ),
+        )
+        .unwrap();
 
         // move the cursor forward
         if self.get_cursor_position().col == BUFFER_WIDTH - 1 {
@@ -118,16 +123,20 @@ impl Writer {
         // Move each line up by one
         for row in 1..BUFFER_HEIGHT {
             for col in 0..BUFFER_WIDTH {
-                unsafe_wrappers::copy_char(Position { col, row }, Position { col, row: row - 1 }).unwrap();
+                unsafe_wrappers::copy_char(Position { col, row }, Position { col, row: row - 1 })
+                    .unwrap();
             }
         }
 
         // Clear the last line
-        let blank = VGAChar::new_from_ascii_foreground_background_colors(b' ', ColorCodeVga::White, ColorCodeVga:: Black);
+        let blank = VGAChar::new_from_ascii_foreground_background_colors(
+            b' ',
+            ColorCodeVga::White,
+            ColorCodeVga::Black,
+        );
         let last_row = BUFFER_HEIGHT - 1;
         for col in 0..BUFFER_WIDTH {
-            unsafe_wrappers::write_char(Position {col, row: last_row}, blank).unwrap();
+            unsafe_wrappers::write_char(Position { col, row: last_row }, blank).unwrap();
         }
     }
-
 }

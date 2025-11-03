@@ -3,11 +3,11 @@
 build: build-x86_64
 
 # Directories
-ASM_SRC_DIR := src/implementation/arch/x86_64/boot
+ASM_SRC_DIR := src/arch/x86_64/boot
 ASM_SRCS    := $(wildcard $(ASM_SRC_DIR)/*.asm)
 ASM_OBJS    := $(patsubst $(ASM_SRC_DIR)/%.asm, build/x86_64/%.o, $(ASM_SRCS))
 
-RUST_SRC_ALL := $(shell find src/implementation/kernel -name '*.rs')
+RUST_SRC_ALL := $(shell find src/kernel -name '*.rs')
 RUST_LIB     := target/x86_64-unknown-none/release/librust_kernel.a
 
 LINKER_SCRIPT := targets/x86_64/linker.ld

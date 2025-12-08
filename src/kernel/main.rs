@@ -4,7 +4,6 @@
 
 mod panic;
 mod std_lib;
-
 use std_lib::vga::*;
 #[no_mangle] // prevents Rust from mangling the name
 pub extern "C" fn kernel_main() -> ! {

@@ -1,6 +1,16 @@
-use x86_64::structures::idt::InterruptStackFrame;
+/*
+This file defines the IRQ dispatch table and related structures for managing IRQ handlers.
+It allows registering, unregistering, and running IRQ handlers for specific IRQ numbers.
+
+This file is for use by the architecture-specific interrupt handling code.
+The architecture-specific code is responsible for initializing the dispatch table
+and forwarding the interrupts to the appropriate handlers in this table.
+ */
+use crate::arch::CpuState;
 use crate::interrupts::definitions::*;
 
+/// Irq handler is a struct which contains the handler function the interrupt handler name.
+/// The name is used to identify the handler when unregistering it.
 pub struct IrqHandler{
     handler: IrqHandlerFn,
     name: IrqHandlerName,
@@ -65,7 +75,7 @@ impl IrqHandlersEntry {
     /// otherwise IrqResult::NotHandled. This functions calls each registered handler in order until
     /// one handles the interrupt. When a handler returns IrqResult::Handled, the function stops and
     /// returns that result.
-    pub fn run_handler(&self, stack_frame: &InterruptStackFrame) -> IrqResult {
+    pub fn run_handler(&self, stack_frame: &CpuState) -> IrqResult {
         for slot in self.handlers.iter() {
             if let Some(registered_handler) = slot {
                 let result = registered_handler.get_handler()(stack_frame);
@@ -93,6 +103,14 @@ impl IrqDispatchTable {
     pub fn register_handler(&mut self, irq_num: usize, handler: IrqHandlerFn, name: IrqHandlerName) -> bool {
         if irq_num < TOTAL_IRQS_NUMBER {
             self.entries[irq_num].register_handler(handler, name)
+        } else {
+            false
+        }
+    }
+
+    pub fn unregister_handler(&mut self, irq_num: usize, name: IrqHandlerName) -> bool {
+        if irq_num < TOTAL_IRQS_NUMBER {
+            self.entries[irq_num].unregister_handler(name)
         } else {
             false
         }

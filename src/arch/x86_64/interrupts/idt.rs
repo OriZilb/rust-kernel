@@ -14,8 +14,8 @@ use x86_64::structures::idt::{InterruptDescriptorTable, InterruptStackFrame};
 use crate::interrupts::dispatch_table::{IrqDispatchTable};
 use spin::{Once, Mutex};
 use paste::paste;
-use crate::arch::x86_64::interrupts::initialize_pic::PICS;
-use crate::arch::x86_64::interrupts::initialize_pic::PIC_1_OFFSET;
+use crate::arch::x86_64::interrupts::initializations::PICS;
+use crate::arch::x86_64::interrupts::initializations::PIC_1_OFFSET;
 
 lazy_static! {
     /// The Interrupt Descriptor Table (IDT) for the system.
@@ -63,12 +63,12 @@ pub(super) fn common_irq_handler(stack_frame: InterruptStackFrame, irq_num: usiz
 /// Initialize the Interrupt Descriptor Table (IDT) with IRQ handlers.
 /// Essentially, this function uses the macro generated wrappers for the common_irq_handler to
 /// pass the IRQ number along with the interrupt stack frame to the handler.
-pub fn init_idt() {
+pub(super) fn init_idt() {
     let mut idt = InterruptDescriptorTable::new();
 
     for i in 0..IRQ_HANDLERS.len(){
-        let index = i as u8 + PIC_1_OFFSET;
-        idt[index].set_handler_fn(IRQ_HANDLERS[i]);
+        let vector_index = i as u8 + PIC_1_OFFSET;
+        idt[vector_index].set_handler_fn(IRQ_HANDLERS[i]);
     }
 
     IDT.call_once(|| idt).load();

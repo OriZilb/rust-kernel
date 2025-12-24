@@ -1,4 +1,4 @@
-use x86_64::structures::idt::InterruptStackFrame;
+use crate::arch::CpuState;
 use heapless::String;
 
 /// The enum represents the possible return values of an IRQ (Interrupt Request) handler.
@@ -12,7 +12,7 @@ pub enum IrqResult {
 /// Type alias for an IRQ handler function.
 /// The function takes an IRQ number and a reference to the interrupt stack frame,
 /// and returns an IrqResult indicating the outcome of the handling.
-pub type IrqHandlerFn = fn(&InterruptStackFrame) -> IrqResult;
+pub type IrqHandlerFn = fn(&CpuState) -> IrqResult;
 
 /// Number of handlers that can be registered per IRQ number.
 pub const HANDLERS_PER_IRQ_NUMBER: usize = 4;

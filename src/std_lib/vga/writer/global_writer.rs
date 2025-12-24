@@ -70,3 +70,7 @@ pub fn get_background_color() -> crate::std_lib::vga::ColorCodeVga {
 pub fn set_background_color(background: crate::std_lib::vga::ColorCodeVga) {
     GLOBAL_WRITER.lock().set_background_color(background);
 }
+
+pub fn print_byte(byte: u8) {
+    GLOBAL_WRITER.lock().handle_char(byte);
+}

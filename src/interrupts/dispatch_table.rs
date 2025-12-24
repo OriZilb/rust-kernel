@@ -1,19 +1,20 @@
-use crate::kernel::interrupts::definitions::{HANDLERS_PER_IRQ_NUMBER, IrqHandlerFn, TOTAL_IRQS_NUMBER};
+use x86_64::structures::idt::InterruptStackFrame;
+use crate::interrupts::definitions::*;
 
-pub(super) struct IrqHandler{
+pub struct IrqHandler{
     handler: IrqHandlerFn,
-    name: str,
+    name: IrqHandlerName,
 }
 
 impl IrqHandler {
-    pub(super) fn new(name: &str, handler: IrqHandlerFn) -> Self {
+    pub fn new(name: IrqHandlerName, handler: IrqHandlerFn) -> Self {
         Self {
             handler,
             name,
         }
     }
 
-    pub fn get_name(&self) -> &str {
+    pub fn get_name(&self) -> &IrqHandlerName {
         &self.name
     }
 
@@ -23,20 +24,20 @@ impl IrqHandler {
 }
 
 /// Represents a collection of IRQ handlers for a specific IRQ number.
-pub(super) struct IrqHandlersEntry{
+pub struct IrqHandlersEntry{
     pub handlers: [Option<IrqHandler>; HANDLERS_PER_IRQ_NUMBER]
 }
 
 impl IrqHandlersEntry {
     pub const fn new() -> Self {
         Self {
-            handlers: [None; HANDLERS_PER_IRQ_NUMBER],
+            handlers: [const{None}; HANDLERS_PER_IRQ_NUMBER],
         }
     }
 
     /// Registers a new IRQ handler in the entry.
     /// Returns true if the handler was successfully registered, false if there was no space.
-    pub fn register_handler(&mut self, handler: IrqHandlerFn, name: &str) -> bool {
+    pub fn register_handler(&mut self, handler: IrqHandlerFn, name: IrqHandlerName) -> bool {
         for slot in self.handlers.iter_mut() {
             if slot.is_none() {
                 *slot = Some(IrqHandler::new(name, handler));
@@ -48,10 +49,10 @@ impl IrqHandlersEntry {
 
     /// Unregisters an IRQ handler from the entry.
     /// Returns true if the handler was found and unregistered, false otherwise.
-    pub fn unregister_handler(&mut self, handler: IrqHandlerFn) -> bool {
+    pub fn unregister_handler(&mut self, handler_name: IrqHandlerName) -> bool {
         for slot in self.handlers.iter_mut() {
             if let Some(registered_handler) = slot {
-                if *registered_handler.get_name() == handler.get_name() {
+                if *registered_handler.get_name() == handler_name {
                     *slot = None;
                     return true;
                 }
@@ -67,7 +68,7 @@ impl IrqHandlersEntry {
     pub fn run_handler(&self, stack_frame: &InterruptStackFrame) -> IrqResult {
         for slot in self.handlers.iter() {
             if let Some(registered_handler) = slot {
-                let result = (registered_handler.get_handler())(stack_frame);
+                let result = registered_handler.get_handler()(stack_frame);
                 if result == IrqResult::Handled {
                     return IrqResult::Handled;
                 }
@@ -78,14 +79,22 @@ impl IrqHandlersEntry {
 }
 
 /// Represents the IRQ dispatch table containing handlers for all IRQ numbers.
-pub(super) struct IrqDispatchTable {
+pub struct IrqDispatchTable {
     pub entries: [IrqHandlersEntry; TOTAL_IRQS_NUMBER]
 }
 
 impl IrqDispatchTable {
     pub const fn new() -> Self {
         Self {
-            entries: [IrqHandlersEntry::new(); TOTAL_IRQS_NUMBER],
+            entries: [const{IrqHandlersEntry::new()}; TOTAL_IRQS_NUMBER],
+        }
+    }
+
+    pub fn register_handler(&mut self, irq_num: usize, handler: IrqHandlerFn, name: IrqHandlerName) -> bool {
+        if irq_num < TOTAL_IRQS_NUMBER {
+            self.entries[irq_num].register_handler(handler, name)
+        } else {
+            false
         }
     }
 }

@@ -1,4 +1,2 @@
-mod interrupt_handlers;
-pub mod consts;
-mod initializations;
-pub use consts::PICS;
+pub mod initialize_pic;
+pub mod idt;

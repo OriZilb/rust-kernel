@@ -109,7 +109,15 @@ impl Writer {
             current_position.col = BUFFER_WIDTH - 1;
         }
         self.set_cursor_position(current_position);
-        self.print_char(b' ');
+        unsafe_wrappers::write_char(
+            self.get_cursor_position(),
+            VGAChar::new_from_ascii_foreground_background_colors(
+                b' ',
+                self.get_foreground_color(),
+                self.get_background_color(),
+            ),
+        )
+            .unwrap();
     }
 
     /// Scroll the screen up by one line

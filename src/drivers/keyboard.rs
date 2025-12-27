@@ -1,6 +1,6 @@
 use pc_keyboard::{Keyboard, layouts::Us104Key, ScancodeSet1, HandleControl};
 use crate::arch::drivers::keyboard::read_keyboard_input;
-use crate::interrupts::definitions::IrqResult;
+use crate::interrupts::irq_handler_types::IrqResult;
 use crate::arch::CpuState;
 use crate::std_lib::vga::*;
 use lazy_static::lazy_static;

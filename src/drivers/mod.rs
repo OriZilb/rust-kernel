@@ -1,6 +1,6 @@
 mod keyboard;
 use crate::arch::interrupts::initialize_interrupts;
-use crate::interrupts::definitions::IrqNumber;
+use crate::interrupts::consts::IrqNumber;
 use crate::interrupts::register_driver;
 use crate::std_lib::vga::print;
 pub fn load_drivers() {

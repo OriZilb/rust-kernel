@@ -26,7 +26,7 @@ pub(super) type IrqHandlerName = String<MAX_IRQ_HANDLER_NAME_SIZE>;
 
 /// Enum representing the IRQ numbers for various hardware interrupts.
 #[derive(Clone, Copy)]
-pub(super) enum IrqNumber {
+pub enum IrqNumber {
     SystemTimer,
     Keyboard,
     InterruptController,

@@ -1,11 +1,8 @@
-use cfg_if::cfg_if;
 pub mod x86_64;
 
-cfg_if! {
-    if #[cfg(target_arch = "x86_64")] {
-        pub type CpuState = x86_64::CpuState;
-        pub use x86_64::interrupts::initializations::initialize_interrupts;
-        pub use x86_64::interrupts::idt::DISPATCH_TABLE;
-        pub use x86_64::drivers::keyboard;
-    }
-}
+#[cfg(target_arch = "x86_64")]
+pub use x86_64::*;
+
+// For future architectures support we need to insert the needed cfg attributes and re-exports here.
+// Generally, each architecture should have the same submodules exports as x86_64 above to have a consistent API.
+// This way the kernel would compile cleanly for different architectures.

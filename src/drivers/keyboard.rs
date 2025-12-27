@@ -1,5 +1,5 @@
 use pc_keyboard::{Keyboard, layouts::Us104Key, ScancodeSet1, HandleControl};
-use crate::arch::keyboard::read_keyboard_input;
+use crate::arch::drivers::keyboard::read_keyboard_input;
 use crate::interrupts::definitions::IrqResult;
 use crate::arch::CpuState;
 use crate::std_lib::vga::*;

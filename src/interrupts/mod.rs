@@ -1,4 +1,4 @@
-use crate::arch::DISPATCH_TABLE;
+use crate::arch::interrupts::DISPATCH_TABLE;
 use crate::interrupts::definitions::{IrqHandlerFn, IrqHandlerName};
 
 pub mod definitions;

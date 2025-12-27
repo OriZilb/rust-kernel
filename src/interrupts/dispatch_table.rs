@@ -90,7 +90,8 @@ impl IrqHandlersEntry {
 
 /// Represents the IRQ dispatch table containing handlers for all IRQ numbers.
 pub struct IrqDispatchTable {
-    pub entries: [IrqHandlersEntry; TOTAL_IRQS_NUMBER]
+    pub entries: [IrqHandlersEntry; TOTAL_IRQS_NUMBER],
+    pub entry_count: usize,
 }
 
 impl IrqDispatchTable {

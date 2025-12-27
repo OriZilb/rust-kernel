@@ -1,3 +1,4 @@
 pub mod initializations;
+pub use initializations::initialize_interrupts;
 pub mod idt;
-use initializations::initialize_interrupts;
+pub use idt::DISPATCH_TABLE;

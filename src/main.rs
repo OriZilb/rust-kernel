@@ -8,7 +8,7 @@ mod panic;
 mod interrupts;
 mod arch;
 mod std_lib;
-use std_lib::vga::*;
+use std_lib::vga::{print, clear_screen};
 mod drivers;
 use drivers::load_drivers;
 
